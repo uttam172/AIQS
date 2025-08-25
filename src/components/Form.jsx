@@ -15,7 +15,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
 
             <form
                 onSubmit={handleSubmit}
-                className="mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism"
+                className="mt-10 w-full max-w-2xl flex flex-col gap-7"
             >
                 <label>
                     <span className="font-satoshi font-samibold text-base text-gray-700">
@@ -26,7 +26,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
                         onChange={(e) => setPost({ ...post, prompt: e.target.value })}
                         placeholder="Write your prompt here..."
                         required
-                        className="form_textarea"
+                        className="form_textarea glassmorphism"
                     />
                 </label>
 
@@ -42,12 +42,12 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
                         onChange={(e) => setPost({ ...post, tag: e.target.value })}
                         placeholder="#tag"
                         required
-                        className="form_input"
+                        className="form_input glassmorphism"
                     />
                 </label>
 
                 <div className="flex-end mx-3 mb-5 gap-4">
-                    <Link href="/" className="text-gray-500 text-sm">
+                    <Link href="/" className="px-5 py-1.5 rounded-full text-gray-500 text-sm bg-gray-300 hover:bg-gray-100">
                         Cancel
                     </Link>
 

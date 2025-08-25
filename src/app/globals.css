@@ -5,6 +5,8 @@
     --font-satoshi: Satoshi;
     --font-inter: Inter;
     --color-primary-orange: #FF5722;
+
+    --shadow-glass: inset 10px -50px 94px 0 rgba(199, 199, 199, 0.2);
 }
 
 .main {
@@ -107,11 +109,11 @@
 }
 
 .copy_btn {
-    @apply w-7 h-7 rounded-full bg-white/10 inset-shadow-[10px_-50px_94px_0_rgba(199,199,199,0.2)] backdrop-blur flex justify-center items-center cursor-pointer
+    @apply w-7 h-7 p-1 rounded-full bg-gray-100 shadow-glass backdrop-blur flex justify-center items-center cursor-pointer;
 }
 
 .glassmorphism {
-    @apply w-7 h-7 rounded-full bg-white/10 inset-shadow-[10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur flex justify-center items-center cursor-pointer;
+    @apply w-7 h-7 rounded-full bg-white/10 shadow-glass backdrop-blur flex justify-center items-center cursor-pointer;
 }
 
 .prompt_layout {
@@ -129,7 +131,7 @@
 }
 
 .form_input {
-    @apply w-full flex rounded-lg mt-2 p-3 text-sm text-gray-500 outline-0;
+    @apply w-full flex rounded-lg mt-2 px-3 py-5 text-sm text-gray-500 outline-0;
 }
 
 /* Nav Component */
