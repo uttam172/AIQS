@@ -181,10 +181,3 @@ npm run dev
 * Redirect URL mismatch → make sure **Google Console redirect URI** matches **NEXTAUTH\_URL/api/auth/callback/google**.
 
 ---
-
-```
-
----
-
-Would you like me to make this **README shorter for production use** (just clean steps), or keep this **detailed version (with error fixes + context)**?
-```
