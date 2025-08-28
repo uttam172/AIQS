@@ -13,7 +13,6 @@ const RootLayout = ({ children }) => {
         <html lang="en">
             <body>
                 <Provider>
-                    {/* <h1 className="text-red-600 bg-black">sdgbhdb</h1> */}
                     <div className="main">
                         <div className="gradient" />
                     </div>
