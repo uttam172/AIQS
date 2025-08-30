@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 
+import axios from "axios"
+
 import Form from '@/components/Form'
 
 const UpdatePrompt = () => {
@@ -17,7 +19,7 @@ const UpdatePrompt = () => {
 
     useEffect(() => {
         const getPromptDetails = async () => {
-            const response = await fetch(`/api/prompt/${promptId}`)
+            const response = await axios.get(`/api/prompt/${promptId}`)
             const data = await response.json()
 
             setPost({
@@ -36,13 +38,17 @@ const UpdatePrompt = () => {
         if (!promptId) return alert("Missing PromptId!")
 
         try {
-            const response = await fetch(`/api/prompt/${promptId}`, {
-                method: "PATCH",
-                body: JSON.stringify({
-                    prompt: post.prompt,
-                    tag: post.tag,
-                }),
+            const response = await axios.patch(`/api/prompt/${promptId}`, {
+                prompt: post.prompt,
+                tag: post.tag,
             })
+            // const response = await fetch(`/api/prompt/${promptId}`, {
+            //     method: "PATCH",
+            //     body: JSON.stringify({
+            //         prompt: post.prompt,
+            //         tag: post.tag,
+            //     }),
+            // })
 
             if (response.ok) {
                 router.push("/")

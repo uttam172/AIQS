@@ -4,6 +4,9 @@ import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
+import Swal from "sweetalert2"
+import axios from "axios"
+
 import Profile from '@/components/Profile'
 
 const MyProfile = () => {
@@ -15,13 +18,13 @@ const MyProfile = () => {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await fetch(`/api/users/${session?.user.id}/posts`)
-            const data = await response.json()
+            const response = await axios.get(`/api/users/${session?.user.id}/posts`)
+            const data = await response.data
 
             setPosts(data)
         }
 
-        if(session?.user.id) fetchPosts()
+        if (session?.user.id) fetchPosts()
     }, [])
 
     const handleEdit = (post) => {
@@ -29,21 +32,27 @@ const MyProfile = () => {
     }
 
     const handleDelete = async (post) => {
-        const hasConfirmed = confirm("Are you sure you want to delete this prompt?")
+        Swal.fire({
+            icon: 'warning',
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete(`/api/prompt/${post._id.toString()}`)
 
-        if(hasConfirmed) {
-            try {
-                await fetch(`/api/prompt/${post._id.toString()}`,{
-                    method: 'DELETE'
-                })
-
-                const filteredPosts = posts.filter((p) => p._id !== post._id)
-
-                setPosts(filteredPosts)
-            } catch (error) {
-                console.log(error)
+                    const filteredPosts = posts.filter((p) => p._id !== post._id)
+                    
+                    setPosts(filteredPosts)
+                } catch (error) {
+                    console.log(error)
+                }
             }
-        }
+        })
     }
 
     return (

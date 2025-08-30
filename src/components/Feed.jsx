@@ -1,6 +1,9 @@
 'use client'
 
 import { useState, useEffect } from "react"
+
+import axios from "axios"
+
 import PromptCard from "./PromptCard.jsx"
 
 const PromptCardList = ({ data, handleTagClick }) => {
@@ -25,7 +28,7 @@ const Feed = () => {
     const [searchedResults, setSearchedResults] = useState([])
 
     const fetchPosts = async () => {
-        const response = await fetch('/api/prompt')
+        const response = await axios.get('/api/prompt')
         const data = await response.json()
 
         setPosts(data)
