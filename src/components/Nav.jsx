@@ -30,7 +30,7 @@ const Nav = () => {
                     alt='logo'
                     width={150}
                     height={150}
-                    className='object-contain h-auto'
+                    className='object-contain'
                     priority={false}
                 />
             </Link>
