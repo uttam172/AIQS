@@ -43,7 +43,7 @@ const UpdatePrompt = () => {
                 tag: post.tag,
             })
 
-            if (response.ok) {
+            if (response.status === 200) {
                 router.push("/")
             }
         } catch (error) {
