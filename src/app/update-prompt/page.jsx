@@ -20,7 +20,7 @@ const UpdatePrompt = () => {
     useEffect(() => {
         const getPromptDetails = async () => {
             const response = await axios.get(`/api/prompt/${promptId}`)
-            const data = await response.json()
+            const data = await response.data
 
             setPost({
                 prompt: data.prompt,
@@ -42,13 +42,6 @@ const UpdatePrompt = () => {
                 prompt: post.prompt,
                 tag: post.tag,
             })
-            // const response = await fetch(`/api/prompt/${promptId}`, {
-            //     method: "PATCH",
-            //     body: JSON.stringify({
-            //         prompt: post.prompt,
-            //         tag: post.tag,
-            //     }),
-            // })
 
             if (response.ok) {
                 router.push("/")

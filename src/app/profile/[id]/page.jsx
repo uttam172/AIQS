@@ -16,7 +16,7 @@ const UserProfile = ({ params }) => {
     useEffect(() => {
         const fetchPosts = async () => {
             const response = await axios.get(`/api/users/${params?.id}/posts`)
-            const data = await response.json() // check and replace with 'response.data' if the API returns a different structure in all files
+            const data = await response.data // check and replace with 'response.data' if the API returns a different structure in all files
 
             setUserPosts(data)
         }
