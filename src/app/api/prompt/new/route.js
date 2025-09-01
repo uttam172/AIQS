@@ -1,5 +1,6 @@
 import { connectToDB } from "@/utils/database"
 import Prompt from '@/models/prompt'
+import { Respond } from "@/utils/Respond"
 
 export const POST = async (req) => {
     const { userId, prompt, tag } = await req.json()
@@ -14,8 +15,9 @@ export const POST = async (req) => {
 
         await newPrompt.save()
 
-        return Response.json(newPrompt, { status: 201 })
+        return Respond(201, true, "Prompt posted successfully", newPrompt)
     } catch (error) {
-        return Response.json("Failed to create a new prompt", { status: 500 })
+        console.log(error)
+        return Respond(500, false, error.message)
     }
 }

@@ -1,5 +1,12 @@
-const Respond = (status, data) => {
-    return Response.json(prompt, { status: 200 })
-}
+export const Respond = (statusCode, success, message, data = undefined) => {
+    const body = {
+        success,
+        message,
+        ...(data !== undefined && { data }),
+    }
 
-export default Respond
+    return new Response(JSON.stringify(body), {
+        status: statusCode,
+        headers: { "Content-Type": "application/json" },
+    })
+}

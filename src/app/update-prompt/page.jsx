@@ -20,7 +20,7 @@ const UpdatePrompt = () => {
     useEffect(() => {
         const getPromptDetails = async () => {
             const response = await axios.get(`/api/prompt/${promptId}`)
-            const data = await response.data
+            const data = await response.data.data
 
             setPost({
                 prompt: data.prompt,
@@ -43,7 +43,7 @@ const UpdatePrompt = () => {
                 tag: post.tag,
             })
 
-            if (response.status === 200) {
+            if (response.data.success) {
                 router.push("/")
             }
         } catch (error) {

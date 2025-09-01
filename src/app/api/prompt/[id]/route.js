@@ -1,5 +1,6 @@
 import Prompt from "@/models/prompt"
 import { connectToDB } from "@/utils/database"
+import { Respond } from "@/utils/Respond"
 
 // GET (read)
 export const GET = async (request, { params }) => {
@@ -10,9 +11,10 @@ export const GET = async (request, { params }) => {
 
         if (!prompt) return Response.json("Prompt not found", { status: 404 })
 
-        return Response.json(prompt, { status: 200 })
+        return Respond(200, true, "Data Fetched Successfully", prompt)
     } catch (error) {
-        return Response.json("Failed to fetch all prompts", { status: 500 })
+        console.log(error)
+        return Respond(500, false, error.message)
     }
 }
 
@@ -32,9 +34,10 @@ export const PATCH = async (request, { params }) => {
 
         await existingPrompt.save()
 
-        return Response.json(existingPrompt, { status: 200 })
+        return Respond(200, true, "Prompt Updated Successfully", existingPrompt)
     } catch (error) {
-        return Response.json("Failed to update prompt", { status: 500 })
+        console.log(error)
+        return Respond(500, false, error.message)
     }
 }
 
@@ -45,8 +48,9 @@ export const DELETE = async (request, { params }) => {
 
         await Prompt.findByIdAndDelete(params.id)
 
-        return Response.json("Prompt deleted succrssfully", { status: 200 })
+        return Respond(200, true, "Prompt Deleted Successfully")
     } catch (error) {
-        return Response.json("Failed to delete prompt", { status: 500 })
+        console.log(error)
+        return Respond(500, false, error.message)
     }
 }

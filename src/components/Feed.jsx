@@ -29,7 +29,7 @@ const Feed = () => {
 
     const fetchPosts = async () => {
         const response = await axios.get('/api/prompt')
-        const data = await response.data
+        const data = await response.data.data
 
         setPosts(data)
     }

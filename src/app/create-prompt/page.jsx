@@ -30,7 +30,7 @@ const CreatePrompt = () => {
                 tag: post.tag
             })
 
-            if (response.status === 201) {
+            if (response.data.success) {
                 router.push("/")
             }
         } catch (error) {

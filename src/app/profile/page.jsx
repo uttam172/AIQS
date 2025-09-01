@@ -19,7 +19,7 @@ const MyProfile = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             const response = await axios.get(`/api/users/${session?.user.id}/posts`)
-            const data = await response.data
+            const data = await response.data.data
 
             setPosts(data)
         }
