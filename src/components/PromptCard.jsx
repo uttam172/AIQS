@@ -58,14 +58,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                 {post.prompt}
             </p>
 
-            <p
-                className="font-inter text-sm blue_gradient cursor-pointer"
-                onClick={() => handleTagClick && handleTagClick(post.tag)}
-            >
-                {post.tag}
-            </p>
-
-            {/* <div className="flex flex-wrap justify-content-start items-stretch gap-1">
+            <div className="flex flex-wrap justify-content-start items-stretch gap-1">
                 {post.tag.split(' ').map((tag) => (
                     <p
                         className="font-inter text-sm blue_gradient cursor-pointer"
@@ -75,7 +68,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                         {tag}
                     </p>
                 ))}
-            </div> */}
+            </div>
 
             {session?.user.id === post.creator?._id && pathName === '/profile' && (
                 <div className="mt-5 flex-center gap-4 border-t  border-gray-300 pt-3">

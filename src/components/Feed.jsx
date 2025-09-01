@@ -70,15 +70,16 @@ const Feed = () => {
 
     return (
         <section className="feed">
-            <form className="relative w-full flex-center">
+            <form className="relative flex-center">
                 <input
                     type="text"
                     placeholder="Search for a tag or a username..."
                     value={searchText}
                     onChange={handleSearchChange}
                     required
-                    className="search_input peer"
+                    className="search_input"
                 />
+                {searchText && <img src="/assets/icons/clear.svg" alt="clear" className="absolute right-3 size-3.5 cursor-pointer" onClick={() => setSearchText("")}/>}
             </form>
 
             {/* All Prompts */}
