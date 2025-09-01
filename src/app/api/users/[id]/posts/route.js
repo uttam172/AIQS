@@ -3,11 +3,13 @@ import { connectToDB } from "@/utils/database"
 import { Respond } from "@/utils/Respond"
 
 export const GET = async (request, {params}) => {
+    const { id } = await params
+    
     try {
         await connectToDB()
 
-        const userPosts = await Prompt.find({
-            creator: params.id
+        const userPosts = await Prompt.find({ 
+            creator: id 
         }).populate('creator')
 
         return Respond(200, true, "All user's posts fetched successfully", userPosts)

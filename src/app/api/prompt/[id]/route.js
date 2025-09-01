@@ -4,10 +4,12 @@ import { Respond } from "@/utils/Respond"
 
 // GET (read)
 export const GET = async (request, { params }) => {
+    const { id } = await params
+
     try {
         await connectToDB()
 
-        const prompt = await Prompt.findById(params.id).populate('creator')
+        const prompt = await Prompt.findById(id).populate('creator')
 
         if (!prompt) return Response.json("Prompt not found", { status: 404 })
 
@@ -21,11 +23,12 @@ export const GET = async (request, { params }) => {
 // Patch (update)
 export const PATCH = async (request, { params }) => {
     const { prompt, tag } = await request.json()
+    const { id } = await params
 
     try {
         await connectToDB()
 
-        const existingPrompt = await Prompt.findById(params.id)
+        const existingPrompt = await Prompt.findById(id)
 
         if (!existingPrompt) return Response.json("Prompt not found", { status: 404 })
 
@@ -43,10 +46,12 @@ export const PATCH = async (request, { params }) => {
 
 // Delete (delete)
 export const DELETE = async (request, { params }) => {
+    const { id } = await params
+
     try {
         await connectToDB()
 
-        await Prompt.findByIdAndDelete(params.id)
+        await Prompt.findByIdAndDelete(id)
 
         return Respond(200, true, "Prompt Deleted Successfully")
     } catch (error) {
