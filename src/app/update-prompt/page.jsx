@@ -7,6 +7,7 @@ import { Suspense } from "react"
 import axios from "axios"
 
 import Form from '@/components/Form'
+import Loading from "@/components/loading"
 
 const UpdatePrompt = () => {
 
@@ -54,7 +55,7 @@ const UpdatePrompt = () => {
     }
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loading />}>
             <Form
                 type='Edit'
                 post={post}
