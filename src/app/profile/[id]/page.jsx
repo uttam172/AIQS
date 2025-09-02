@@ -1,34 +1,27 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useEffect } from "react"
 
-import axios from "axios"
+import useAuthStore from "@/store/useAuthStore"
+import useUserPromptStore from "@/store/useUserPromptStore"
 
 import Profile from "@/components/Profile"
 
-const UserProfile = ({ params }) => {
-    const searchParams = useSearchParams()
-    const userName = searchParams.get("name")
+const UserProfile = () => {
 
-    const [userPosts, setUserPosts] = useState([])
-
+    const { session } = useAuthStore()
+    const { userPrompts, fetchUserPrompts } = useUserPromptStore()
+    
+    console.log(session?.user.name)
     useEffect(() => {
-        const fetchPosts = async () => {
-            const response = await axios.get(`/api/users/${params?.id}/posts`)
-            const data = await response.data.data
-
-            setUserPosts(data)
-        }
-
-        if (params?.id) fetchPosts()
-    }, [params.id])
+        fetchUserPrompts(session?.user.id)
+    }, [session])
 
     return (
         <Profile
-            name={userName}
-            desc={`Welcome to ${userName}'s personalized profile page. Explore ${userName}'s exceptional prompts and be inspired by the power of their imagination`}
-            data={userPosts}
+            name={session?.user.name}
+            desc={`Welcome to ${session?.user.name}'s personalized profile page. Explore ${session?.user.name}'s exceptional prompts and be inspired by the power of their imagination`}
+            data={userPrompts}
         />
     );
 };
