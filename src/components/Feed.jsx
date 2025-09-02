@@ -20,17 +20,14 @@ const PromptCardList = ({ data, handleTagClick }) => {
 }
 
 const Feed = () => {
-    const { prompts, fetchPrompts, loading, error } = usePromptStore()
+    const { prompts, fetchPrompts } = usePromptStore()
 
     const [searchText, setSearchText] = useState('')
     const [searchTimeout, setSearchTimeout] = useState(null)
     const [searchedResults, setSearchedResults] = useState([])
 
     useEffect(() => {
-        const loadData = async () => {
-            await fetchPrompts()
-        }
-        loadData()
+        fetchPrompts()        
     }, [])
 
     const filterPrompts = (searchtext) => {

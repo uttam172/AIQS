@@ -2,14 +2,14 @@
 
 import { useState } from "react"
 import Image from 'next/image'
-import { useSession } from "next-auth/react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
+import useAuthStore from "@/store/useAuthStore"
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
-    const { data: session } = useSession()
     const pathName = usePathname()
-    const router = useRouter()
+
+    const { session } = useAuthStore()
 
     const [copied, setCopied] = useState('')
 
