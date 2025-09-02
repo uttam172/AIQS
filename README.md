@@ -52,12 +52,14 @@ Think of it like Instagram — but instead of photos, people post their **best A
 
 ```
 AIQS/
-├── app/                 # Next.js app directory (pages, API routes, etc.)
-├── components/          # Reusable UI components
-├── store/               # Zustand stores
-├── models/              # Mongoose models
-├── lib/                 # DB connection & auth helpers
-└── public/              # Static assets
+├── src/
+|   ├── app/                 # Next.js app directory (pages, API routes, etc.)
+|   ├── components/          # Reusable UI components
+|   ├── store/               # Zustand stores
+|   ├── models/              # Mongoose models
+|   └── utils/               # DB connection & auth helpers
+|
+├── public/                  # Static assets
 ```
 
 ---
