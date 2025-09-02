@@ -51,9 +51,15 @@ const useUserPromptStore = create((set, get) => ({
         }
     },
 
-    editPrompt: async (promptData) => {
+    editPrompt: async (promptId, promptData) => {
+        const { prompt, tag } = promptData
         try {
-            
+            set({ loading: true, error: null })
+
+            const res = await axios.patch(`/api/prompt/${promptId}`, { prompt, tag })
+
+            set({ loading: false })
+            return res.data
         } catch (err) {
             console.log('Error updating prompt:', err)
             set({ loading: false, error: 'Failed to update prompt' })

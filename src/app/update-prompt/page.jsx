@@ -4,8 +4,6 @@ import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 
-import axios from "axios"
-
 import useUserPromptStore from "@/store/useUserPromptStore"
 
 import Form from '@/components/Form'
@@ -20,7 +18,7 @@ const UpdatePrompt = () => {
 
     const { editPrompt, fetchPromptById } = useUserPromptStore()
 
-    const [post, setPost] = useState({ prompt: "", tag: "", })
+    const [post, setPost] = useState({ prompt: "", tag: "" })
     const [submitting, setIsSubmitting] = useState(false)
 
     useEffect(() => {
@@ -38,17 +36,12 @@ const UpdatePrompt = () => {
         e.preventDefault()
         setIsSubmitting(true)
 
-        if (!promptId) return alert("Missing PromptId!")
-
-        editPrompt(post)
+        if (!promptId) return alert("Missing PromptId!")        
 
         try {
-            const response = await axios.patch(`/api/prompt/${promptId}`, {
-                prompt: post.prompt,
-                tag: post.tag,
-            })
+            const response = await editPrompt(promptId, post)
 
-            if (response.data.success) {
+            if (response.success) {
                 router.push("/")
             }
         } catch (error) {
