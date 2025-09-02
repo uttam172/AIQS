@@ -1,14 +1,66 @@
+---
+
+# 🤖 AIQS – Share & Discover AI Prompts
+
+A full-stack web application built using **Next.js, MongoDB, Zustand, TailwindCSS, and Google OAuth** that allows users to **create, share, and explore AI prompts**.
+
+Think of it like Instagram — but instead of photos, people post their **best AI prompts** to help others unlock creativity.
+
+> "Prompts are the new code. Share yours, learn from others."
 
 ---
 
-````markdown
-# Next.js App with Google OAuth, MongoDB & Tailwind v4
+## 🚀 Features
 
-This project integrates:
+* 🔑 Google OAuth Login & Profile Creation
+* ✍️ Create and share AI prompts
+* 👀 Explore prompts shared by others
+* 🧑‍🤝‍🧑 View user profiles and their shared prompts
+* ✏️ Update your prompts anytime
+* 🗑️ Delete prompts you no longer want to share
+* ⚡ Zustand-powered instant state updates (no reload needed)
 
-- **Google OAuth** login with [`next-auth`](https://next-auth.js.org/)  
-- **MongoDB Atlas** for user storage  
-- **TailwindCSS v4** with glassmorphism styling  
+---
+
+## 🧱 Tech Stack
+
+### 💻 Frontend – Next.js (v13+)
+
+* Next.js App Router
+* TailwindCSS for styling
+* Zustand for global state management
+* React Hooks & Components
+
+### 🧠 Backend – Next.js API Routes
+
+* Built-in API routes (no separate server)
+* MongoDB with Mongoose ODM
+* Google OAuth for authentication
+* Secure session handling
+
+### ☁️ Others
+
+* MongoDB Atlas (Cloud DB)
+* NextAuth.js (Google OAuth integration)
+* Vercel (Deployment-ready)
+
+---
+
+## 🏗️ Folder Structure
+
+### Project Root
+
+```
+AIQS/
+├── app/                 # Next.js app directory (pages, API routes, etc.)
+├── components/          # Reusable UI components
+├── store/               # Zustand stores
+├── models/              # Mongoose models
+├── lib/                 # DB connection & auth helpers
+└── public/              # Static assets
+```
+
+---
 
 ---
 
@@ -26,9 +78,24 @@ This project integrates:
 
 ---
 
-## ⚙️ Environment Variables
+## 🧪 Running the App Locally
 
-Create a `.env.local` file:
+### 1️⃣ Clone the Repo
+
+```bash
+git clone https://github.com/your-username/AIQS.git
+cd AIQS
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Setup Environment Variables
+
+Create `.env.local` file in the root:
 
 ```env
 GOOGLE_CLIENT_ID=your_google_client_id
@@ -42,142 +109,53 @@ NEXTAUTH_SECRET=your_random_secret_string
 MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/?retryWrites=true&w=majority
 ````
 
----
-
-## 📦 NextAuth + MongoDB Integration
-
-`src/app/api/auth/[...nextauth]/route.js`
-
-```js
-import NextAuth from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import User from "@/models/user2"
-import { connectToDB } from "@/utils/database"
-
-const handler = NextAuth({
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-  ],
-  callbacks: {
-    async session({ session }) {
-      const sessionUser = await User.findOne({ email: session.user.email })
-      session.user.id = sessionUser._id.toString()
-      return session
-    },
-    async signIn({ profile }) {
-      try {
-        await connectToDB()
-        const userExists = await User.findOne({ email: profile.email })
-        if (!userExists) {
-          await User.create({
-            email: profile.email,
-            username: profile.name.replace(" ", "").toLowerCase(),
-            image: profile.picture,
-          })
-        }
-        return true
-      } catch (error) {
-        console.log("Error checking if user exists: ", error.message)
-        return false
-      }
-    },
-  },
-})
-
-export { handler as GET, handler as POST }
-```
-
----
-
-## 🗄️ Database Connection
-
-`src/utils/database.js`
-
-```js
-import mongoose from "mongoose"
-
-let isConnected = false
-
-export const connectToDB = async () => {
-  if (isConnected) return
-
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: "shared_prompt",
-    })
-    isConnected = true
-    console.log("MongoDB connected")
-  } catch (err) {
-    console.error("MongoDB connection error:", err)
-  }
-}
-```
-
----
-
-## 🎨 TailwindCSS v4 Setup
-
-No `tailwind.config.js` is needed in Tailwind v4.
-Instead extend theme in `globals.css`:
-
-```css
-@import "tailwindcss";
-
-@theme {
-  --color-primary: #1E40AF;
-  --color-secondary: #9333EA;
-  --color-accent: #F59E0B;
-
-  --shadow-glass: inset 10px -50px 94px 0 rgba(199,199,199,0.2);
-
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-}
-```
-
----
-
-## ✨ Glassmorphism Class
-
-`globals.css`
-
-```css
-.glassmorphism {
-  @apply w-7 h-7 rounded-full bg-white/10 shadow-glass backdrop-blur flex justify-center items-center cursor-pointer;
-}
-```
-
-Usage:
-
-```jsx
-<div className="glassmorphism">
-  <svg className="w-4 h-4 text-white" />
-</div>
-```
-
----
-
-## 🚀 Run Project
+### 4️⃣ Run the Dev Server
 
 ```bash
-npm install
 npm run dev
 ```
 
-* Open [http://localhost:3001](http://localhost:3001)
-* Click **Sign in with Google**
-* On first login, user is stored in MongoDB.
-* Session contains MongoDB `_id`.
+Visit [http://localhost:3000](http://localhost:3000) 🎉
 
 ---
 
-## ✅ Common Issues
+## 📸 Screenshots
 
-* `strictQuery` warning → fixed by removing deprecated Mongoose options.
-* `MongoParseError: option usernewurlparser is not supported` → use only `dbName`, `useNewUrlParser`/`useUnifiedTopology` are no longer needed.
-* Redirect URL mismatch → make sure **Google Console redirect URI** matches **NEXTAUTH\_URL/api/auth/callback/google**.
+> *(Add some UI shots of the feed, profile page, and prompt creation modal here)*
+
+---
+
+## 🧠 Future Enhancements
+
+* ✅ Like & comment on prompts
+* ✅ Save favorite prompts
+* ✅ Dark mode toggle
+* ✅ AI-powered prompt recommendations
+
+---
+
+## 🧑‍💻 Author
+
+**Uttam** – *Full-Stack Developer | Dreamer | Imaginator*
+📫 Connect on [LinkedIn](https://www.linkedin.com/in/uttam172)
+🐙 GitHub: [uttam172](https://github.com/uttam172)
+
+---
+
+## 🏁 License
+
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🌍 Show Your Support!
+
+If you like this project:
+
+* ⭐ Star it on GitHub
+* 🐛 Submit an issue if you find a bug
+* 🔥 Fork it and build your own
+
+> *“Prompts are the new superpower. Let’s share and grow together.”* 🙌
 
 ---
