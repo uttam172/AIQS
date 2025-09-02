@@ -1,8 +1,5 @@
-import axios from 'axios'
 import { create } from 'zustand'
-
-import { signIn as nextAuthSignIn, signOut as nextAuthSignOut, useSession, getProviders } from 'next-auth/react'
-
+import { signIn as nextAuthSignIn, signOut as nextAuthSignOut, getProviders } from 'next-auth/react'
 
 const useAuthStore = create((set) => ({
     session: null,
@@ -12,43 +9,39 @@ const useAuthStore = create((set) => ({
 
     initializeAuth: async () => {
         try {
-            set({ loading: true, error: null })
+            set({ error: null })
 
             const providers = await getProviders()
             set({ providers })
 
-            set({ loading: false, error: null })
+            set({ error: null })
         } catch (err) {
             console.error('Error initializing auth:', err)
-            set({ loading: false, error: 'Failed to initialize auth' })
+            set({ error: 'Failed to initialize auth' })
         }
     },
 
     setSession: (session) => set({ session }),
 
-    signIn: async (providerId) => {
+    signIn: async (providersId) => {
         try {
-            set({ loading: true, error: null })
+            set({ error: null })
 
-            await nextAuthSignIn(providerId)
+            await nextAuthSignIn(providersId)
 
-            set({ loading: false, error: null })
+            set({ error: null })
         } catch (err) {
             console.error('Sign in error:', err)
-            set({ loading: false, error: 'Failed to sign in' })
+            set({ error: 'Failed to sign in' })
         }
     },
 
     signOut: async () => {
-        set({ loading: true })
-        await signOut()
-        set({ user: null, loading: false, error: null })
-    },
-    signOut: async () => {
         try {
             set({ loading: true, error: null })
 
-            await nextAuthSignOut({ callbackUrl: '/' })
+            await nextAuthSignOut({ redirect: false })
+
             set({ session: null, loading: false, error: null })
         } catch (err) {
             console.error('Sign out error:', err)

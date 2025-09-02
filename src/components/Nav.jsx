@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 
 import useAuthStore from '@/store/useAuthStore'
 
@@ -11,16 +11,11 @@ import Loading from './loading'
 
 const Nav = () => {
 
+    const router = useRouter()
+
     const { signIn, signOut, initializeAuth, session, providers, loading, error } = useAuthStore()
 
     const [toggleDropdown, setToggleDropdown] = useState(false)
-
-    const { data: sessionData } = useSession()
-    const setSession = useAuthStore((state) => state.setSession)
-
-    useEffect(() => {
-        setSession(sessionData || null)
-    }, [sessionData, setSession])
 
     useEffect(() => {
         initializeAuth()
@@ -50,7 +45,14 @@ const Nav = () => {
                             Create Post
                         </Link>
 
-                        <button type='button' onClick={signOut} className='outline_btn'>
+                        <button
+                            type='button'
+                            onClick={() => {
+                                signOut()
+                                router.replace('/')
+                            }}
+                            className='outline_btn'
+                        >
                             Sign Out
                         </button>
 
@@ -71,7 +73,7 @@ const Nav = () => {
                                 <button
                                     type='button'
                                     key={provider.name}
-                                    onClick={() => signIn(provider.id)}
+                                    onClick={() => { signIn(provider.id) }}
                                     className='black_btn'
                                 >
                                     Sign In
@@ -116,6 +118,7 @@ const Nav = () => {
                                     onClick={() => {
                                         setToggleDropdown(false)
                                         signOut()
+                                        router.replace('/')
                                     }}
                                     className='mt-5 w-full black_btn'
                                 >
