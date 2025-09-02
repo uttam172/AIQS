@@ -22,6 +22,20 @@ const useUserPromptStore = create((set, get) => ({
         }
     },
 
+    fetchPromptById: async (promptId) => {
+        try {
+            set({ loading: true })
+
+            const res = await axios.get(`/api/prompt/${promptId}`)
+            
+            set({ loading: false })
+            return res.data.data
+        } catch (err) {
+            console.log('Error fetching by ID prompt:', err)
+            set({ loading: false, error: 'Failed to fetch Prompt by ID' })
+        }
+    },
+
     createPrompt: async (promptData) => {
         const { prompt, userId, tag } = promptData
         try {
@@ -38,7 +52,12 @@ const useUserPromptStore = create((set, get) => ({
     },
 
     editPrompt: async (promptData) => {
-
+        try {
+            
+        } catch (err) {
+            console.log('Error updating prompt:', err)
+            set({ loading: false, error: 'Failed to update prompt' })
+        }
     },
 
     deletePrompt: async (promptId) => {

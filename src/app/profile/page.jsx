@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 import Swal from "sweetalert2"
-import axios from "axios"
 
 import useAuthStore from "@/store/useAuthStore"
 import useUserPromptStore from "@/store/useUserPromptStore"
@@ -17,8 +16,6 @@ const MyProfile = () => {
 
     const { session } = useAuthStore()
     const { userPrompts, fetchUserPrompts, deletePrompt } = useUserPromptStore()
-
-    // const [posts, setPosts] = useState([])
 
     useEffect(() => {
         const loadData = async () => {

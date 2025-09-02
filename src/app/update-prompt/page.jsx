@@ -6,6 +6,8 @@ import { Suspense } from "react"
 
 import axios from "axios"
 
+import useUserPromptStore from "@/store/useUserPromptStore"
+
 import Form from '@/components/Form'
 import Loading from "@/components/loading"
 
@@ -13,23 +15,23 @@ const UpdatePrompt = () => {
 
     const router = useRouter()
     const searchParams = useSearchParams()
+
     const promptId = searchParams.get("id")
+
+    const { editPrompt, fetchPromptById } = useUserPromptStore()
 
     const [post, setPost] = useState({ prompt: "", tag: "", })
     const [submitting, setIsSubmitting] = useState(false)
 
     useEffect(() => {
-        const getPromptDetails = async () => {
-            const response = await axios.get(`/api/prompt/${promptId}`)
-            const data = await response.data.data
-
+        const setData = async () => {
+            const data = await fetchPromptById(promptId)
             setPost({
                 prompt: data.prompt,
                 tag: data.tag,
             })
         }
-
-        if (promptId) getPromptDetails()
+        setData()
     }, [promptId])
 
     const updatePrompt = async (e) => {
@@ -37,6 +39,8 @@ const UpdatePrompt = () => {
         setIsSubmitting(true)
 
         if (!promptId) return alert("Missing PromptId!")
+
+        editPrompt(post)
 
         try {
             const response = await axios.patch(`/api/prompt/${promptId}`, {
