@@ -3,24 +3,31 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
+
+import useAuthStore from '@/store/useAuthStore'
+
+import Loading from './loading'
 
 const Nav = () => {
 
-    const { data: session } = useSession()
+    const { signIn, signOut, initializeAuth, session, providers, loading, error } = useAuthStore()
 
-    const [providers, setProviders] = useState(null)
     const [toggleDropdown, setToggleDropdown] = useState(false)
 
+    const { data: sessionData } = useSession()
+    const setSession = useAuthStore((state) => state.setSession)
+
     useEffect(() => {
-        const setUpProviders = async () => {
-            const response = await getProviders()
+        setSession(sessionData || null)
+    }, [sessionData, setSession])
 
-            setProviders(response)
-        }
+    useEffect(() => {
+        initializeAuth()
+    }, [initializeAuth])
 
-        setUpProviders()
-    }, [])
+    if (loading) return <Loading />
+    if (error) return <div className="text-red-500">error: {error}</div>
 
     return (
         <nav className='flex-between w-full mb-16 pt-3'>
@@ -43,7 +50,7 @@ const Nav = () => {
                             Create Post
                         </Link>
 
-                        <button type='button' onClick={() => signOut({ callbackUrl: "/" })} className='outline_btn'>
+                        <button type='button' onClick={signOut} className='outline_btn'>
                             Sign Out
                         </button>
 
@@ -64,7 +71,7 @@ const Nav = () => {
                                 <button
                                     type='button'
                                     key={provider.name}
-                                    onClick={() => { signIn(provider.id) }}
+                                    onClick={() => signIn(provider.id)}
                                     className='black_btn'
                                 >
                                     Sign In
@@ -80,7 +87,7 @@ const Nav = () => {
                 {session?.user ? (
                     <div className="flex">
                         <Image
-                            src={session.user.image ? (session.user.image) : ("/assets/images/logo.svg")}
+                            src={session.user.image ?? "/assets/images/logo.svg"}
                             width={37}
                             height={37}
                             className='rounded-full'
@@ -108,7 +115,7 @@ const Nav = () => {
                                     type='button'
                                     onClick={() => {
                                         setToggleDropdown(false)
-                                        signOut({ callbackUrl: "/" })
+                                        signOut()
                                     }}
                                     className='mt-5 w-full black_btn'
                                 >

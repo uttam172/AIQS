@@ -4,8 +4,8 @@ import Provider from "@/components/Provider"
 import Nav from "@/components/Nav"
 
 export const metadata = {
-  title: "AIQS",
-  description: "Discover & Share AI Prompts",
+    title: "AIQS",
+    description: "Discover & Share AI Prompts",
 }
 
 const RootLayout = ({ children }) => {
