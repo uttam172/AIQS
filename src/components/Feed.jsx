@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react"
 
-import axios from "axios"
-
 import PromptCard from "./PromptCard.jsx"
 import usePromptStore from "@/store/usePromptStore.js"
 

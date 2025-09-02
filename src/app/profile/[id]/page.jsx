@@ -12,7 +12,6 @@ const UserProfile = () => {
     const { session } = useAuthStore()
     const { userPrompts, fetchUserPrompts } = useUserPromptStore()
     
-    console.log(session?.user.name)
     useEffect(() => {
         fetchUserPrompts(session?.user.id)
     }, [session])
