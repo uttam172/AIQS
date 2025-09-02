@@ -1,17 +1,19 @@
 'use client'
 
 import { useState } from "react"
-import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
-import axios from "axios"
+import useUserPromptStore from "@/store/useUserPromptStore"
+import useAuthStore from "@/store/useAuthStore"
 
 import Form from '@/components/Form'
 
 const CreatePrompt = () => {
 
     const router = useRouter()
-    const { data: session } = useSession()
+
+    const { createPrompt } = useUserPromptStore()
+    const { session} = useAuthStore()
 
     const [submitting, setSubmitting] = useState(false)
     const [post, setPost] = useState({
@@ -19,25 +21,18 @@ const CreatePrompt = () => {
         tag: '',
     })
 
-    const createPrompt = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+
         setSubmitting(true)
 
-        try {
-            const response = await axios.post('/api/prompt/new', {
-                prompt: post.prompt,
-                userId: session?.user.id,
-                tag: post.tag
-            })
+        await createPrompt({
+            prompt: post.prompt,
+            userId: session?.user.id,
+            tag: post.tag,
+        })
 
-            if (response.data.success) {
-                router.push("/")
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setSubmitting(false)
-        }
+        router.push("/")
     }
 
     return (
@@ -46,7 +41,7 @@ const CreatePrompt = () => {
             post={post}
             setPost={setPost}
             submitting={submitting}
-            handleSubmit={createPrompt}
+            handleSubmit={handleSubmit}
         />
     )
 }

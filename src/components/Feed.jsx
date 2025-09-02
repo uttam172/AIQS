@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 
 import PromptCard from "./PromptCard.jsx"
+import usePromptStore from "@/store/usePromptStore.js"
 
 const PromptCardList = ({ data, handleTagClick }) => {
     return (
@@ -21,27 +22,23 @@ const PromptCardList = ({ data, handleTagClick }) => {
 }
 
 const Feed = () => {
-    const [posts, setPosts] = useState([])
+    const { prompts, fetchPrompts, loading, error } = usePromptStore()
 
     const [searchText, setSearchText] = useState('')
     const [searchTimeout, setSearchTimeout] = useState(null)
     const [searchedResults, setSearchedResults] = useState([])
 
-    const fetchPosts = async () => {
-        const response = await axios.get('/api/prompt')
-        const data = await response.data.data
-
-        setPosts(data)
-    }
-
     useEffect(() => {
-        fetchPosts()
+        const loadData = async () => {
+            await fetchPrompts()
+        }
+        loadData()
     }, [])
 
     const filterPrompts = (searchtext) => {
         const regex = new RegExp(searchtext, "i") // 'i' flag for case-insensitive search
-        return posts.filter(
-            (item) => 
+        return prompts.filter(
+            (item) =>
                 regex.test(item.creator.username) ||
                 regex.test(item.tag) ||
                 regex.test(item.prompt)
@@ -79,14 +76,14 @@ const Feed = () => {
                     required
                     className="search_input"
                 />
-                {searchText && <img src="/assets/icons/clear.svg" alt="clear" className="absolute right-3 size-3.5 cursor-pointer" onClick={() => setSearchText("")}/>}
+                {searchText && <img src="/assets/icons/clear.svg" alt="clear" className="absolute right-3 size-3.5 cursor-pointer" onClick={() => setSearchText("")} />}
             </form>
 
             {/* All Prompts */}
             {searchText ? (
                 <PromptCardList data={searchedResults} handleTagClick={handleTagClick} />
             ) : (
-                <PromptCardList data={posts} handleTagClick={handleTagClick} />
+                <PromptCardList data={prompts || []} handleTagClick={handleTagClick} />
             )}
         </section>
     )

@@ -8,7 +8,7 @@ export const GET = async (request) => {
 
         const prompts = await Prompt.find({}).populate('creator')
 
-        return Respond(200, true, "All prompts fetched successfully", prompts)
+        return Respond(200, true, "Prompts fetched successfully", prompts)
     } catch (error) {
         console.log(error)
         return Respond(500, false, error.message)

@@ -1,31 +1,31 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
 import Swal from "sweetalert2"
 import axios from "axios"
+
+import useAuthStore from "@/store/useAuthStore"
+import useUserPromptStore from "@/store/useUserPromptStore"
 
 import Profile from '@/components/Profile'
 
 const MyProfile = () => {
 
     const router = useRouter()
-    const { data: session } = useSession()
 
-    const [posts, setPosts] = useState([])
+    const { session } = useAuthStore()
+    const { userPrompts, fetchUserPrompts, deletePrompt } = useUserPromptStore()
+
+    // const [posts, setPosts] = useState([])
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            const response = await axios.get(`/api/users/${session?.user.id}/posts`)
-            const data = await response.data.data
-
-            setPosts(data)
+        const loadData = async () => {
+            await fetchUserPrompts(session?.user.id)
         }
-
-        if (session?.user.id) fetchPosts()
-    }, [])
+        loadData()
+    }, [session])
 
     const handleEdit = (post) => {
         router.push(`/update-prompt?id=${post._id}`)
@@ -42,15 +42,7 @@ const MyProfile = () => {
             confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
             if (result.isConfirmed) {
-                try {
-                    await axios.delete(`/api/prompt/${post._id.toString()}`)
-
-                    const filteredPosts = posts.filter((p) => p._id !== post._id)
-                    
-                    setPosts(filteredPosts)
-                } catch (error) {
-                    console.log(error)
-                }
+                await deletePrompt(post._id.toString())
             }
         })
     }
@@ -59,7 +51,7 @@ const MyProfile = () => {
         <Profile
             name="My"
             desc="Welcome to your personalized profile page"
-            data={posts}
+            data={userPrompts}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
         />

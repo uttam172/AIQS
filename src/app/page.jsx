@@ -1,21 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-
-import useAuthStore from '@/store/useAuthStore'
-
 import Feed from '@/components/Feed'
 
 const Home = () => {
-
-    const { data: sessionData } = useSession()
-    const setSession = useAuthStore((state) => state.setSession)
-
-    useEffect(() => {
-        setSession(sessionData || null)
-    }, [sessionData, setSession])
-
     return (
         <section className="w-full flex-center flex-col">
             <h1 className="head_text text-center">

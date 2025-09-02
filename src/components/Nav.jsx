@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 import useAuthStore from '@/store/useAuthStore'
 
@@ -16,6 +17,13 @@ const Nav = () => {
     const { signIn, signOut, initializeAuth, session, providers, loading, error } = useAuthStore()
 
     const [toggleDropdown, setToggleDropdown] = useState(false)
+
+    const { data: sessionData } = useSession()
+    const setSession = useAuthStore((state) => state.setSession)
+
+    useEffect(() => {
+        setSession(sessionData || null)
+    }, [sessionData, setSession])
 
     useEffect(() => {
         initializeAuth()
