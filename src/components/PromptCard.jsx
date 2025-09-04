@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { usePathname } from "next/navigation"
 import useAuthStore from "@/store/useAuthStore"
 
+import { copy, liked, tick, unliked } from "@/assets/icons"
+
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
     const pathName = usePathname()
@@ -13,10 +15,19 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
     const [copied, setCopied] = useState('')
 
+    const [isLiked, setIsLiked] = useState(false)
+
     const handleCopy = () => {
         setCopied(post.prompt)
         navigator.clipboard.writeText(post.prompt)
         setTimeout(() => setCopied(""), 3000)
+    }
+
+    const handleLike = async (pid) => {
+        setIsLiked(!isLiked)
+        console.log(pid, " - ", session?.user.id)
+        // await likePrompt(post.id, session?.user.id)
+        // await fetchUserPrompts(session?.user.id)
     }
 
     return (
@@ -43,10 +54,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
                 <div className="copy_btn" onClick={handleCopy}>
                     <Image
-                        src={copied === post.prompt
-                            ? '/assets/icons/tick.svg'
-                            : '/assets/icons/copy.svg'
-                        }
+                        src={copied === post.prompt ? tick : copy }
                         alt="copy"
                         width={25}
                         height={25}
@@ -57,6 +65,10 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             <p className="my-4 font-satoshi text-sm text-gray-700">
                 {post.prompt}
             </p>
+
+            <span className="" onClick={() => handleLike(post._id)}>
+                <Image src={isLiked ? liked : unliked} alt="like" width={25} height={25} className="my-3 size-4 cursor-pointer"/> {post.likes}
+            </span>
 
             <div className="flex flex-wrap justify-content-start items-stretch gap-1">
                 {post.tag.split(' ').map((tag) => (

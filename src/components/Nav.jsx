@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react'
 import useAuthStore from '@/store/useAuthStore'
 
 import Loading from './loading'
+import { AIQS, logo } from '@/assets/images'
 
 const Nav = () => {
 
@@ -36,7 +37,7 @@ const Nav = () => {
         <nav className='flex-between w-full mb-16 pt-3'>
             <Link href="/" className='flex gap-2 flex-center'>
                 <Image
-                    src="/assets/images/AIQS.png"
+                    src={AIQS}
                     alt='logo'
                     width={150}
                     height={150}
@@ -97,7 +98,7 @@ const Nav = () => {
                 {session?.user ? (
                     <div className="flex">
                         <Image
-                            src={session.user.image ?? "/assets/images/logo.svg"}
+                            src={session.user.image ?? logo}
                             width={37}
                             height={37}
                             className='rounded-full'
