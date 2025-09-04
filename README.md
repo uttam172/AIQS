@@ -54,12 +54,13 @@ Think of it like Instagram — but instead of photos, people post their **best A
 AIQS/
 ├── src/
 |   ├── app/                 # Next.js app directory (pages, API routes, etc.)
+|   ├── assets/              # Static assets
 |   ├── components/          # Reusable UI components
 |   ├── store/               # Zustand stores
 |   ├── models/              # Mongoose models
 |   └── utils/               # DB connection & auth helpers
 |
-├── public/                  # Static assets
+├── public/                  # Static SEO assets
 ```
 
 ---
