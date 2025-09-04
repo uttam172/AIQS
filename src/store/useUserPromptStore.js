@@ -27,7 +27,7 @@ const useUserPromptStore = create((set, get) => ({
             set({ loading: true })
 
             const res = await axios.get(`/api/prompt/${promptId}`)
-            
+
             set({ loading: false })
             return res.data.data
         } catch (err) {
@@ -37,11 +37,11 @@ const useUserPromptStore = create((set, get) => ({
     },
 
     createPrompt: async (promptData) => {
-        const { prompt, userId, tag } = promptData
+        const { prompt, userId, tag, likedBy } = promptData
         try {
             set({ loading: true, error: null })
 
-            const res = await axios.post('/api/prompt/new', { prompt, userId, tag })
+            const res = await axios.post('/api/prompt/new', { prompt, userId, tag, likedBy })
             const data = res.data.data
 
             set({ loading: false, userPrompts: data })
@@ -73,13 +73,23 @@ const useUserPromptStore = create((set, get) => ({
             await axios.delete(`/api/prompt/${promptId}`)
 
             const newData = get().userPrompts.filter(p => p._id !== promptId)
-            
+
             set({ loading: false, userPrompts: newData })
         } catch (err) {
             console.log('Error deleting prompt:', err)
             set({ loading: false, error: 'Failed to delete prompt' })
         }
     },
+
+    likedByUser: async (promptId, userId) => {
+        try {
+            const res = await axios.post(`/api/prompt/${promptId}/like`, { userId })
+            return res.data
+        } catch (err) {
+            console.log('Error liking prompt:', err)
+            set({ error: 'Failed to like prompt' })
+        }
+    }
 
 }))
 
