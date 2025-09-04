@@ -78,14 +78,24 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             </div>
 
             {/* Prompt Text */}
-            <p className="my-4 font-satoshi text-sm text-gray-700">
+            <p className="my-3 font-satoshi text-sm text-gray-700">
                 {post.prompt}
             </p>
 
             {/* Like Button */}
-            <span className="flex justify-content-start items-center gap-1 text-xs" onClick={() => handleLike(post._id)}>
-                <Image src={isLiked ? liked : unliked} alt="like" width={25} height={25} className="my-3 size-4 cursor-pointer" /> {likedBy.length}
-            </span>
+            <div className="mb-1 flex justify-content-start items-center gap-5">
+                <span className="flex gap-1">
+                    <Image
+                        src={isLiked ? liked : unliked}
+                        alt="like"
+                        width={25}
+                        height={25}
+                        className="size-4 cursor-pointer"
+                        onClick={() => handleLike(post._id)}
+                    />
+                    <p className="text-xs cursor-pointer" onClick={() => { }}>{likedBy.length} Likes</p>
+                </span>
+            </div>
 
             {/* Tags */}
             <div className="flex flex-wrap justify-content-start items-stretch gap-1">
