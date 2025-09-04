@@ -46,6 +46,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
     return (
         <div className="prompt_card">
+            {/* Profile & Copy button */}
             <div className="flex justify-between items-start gap-5">
                 <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
                     <Image
@@ -76,14 +77,17 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                 </div>
             </div>
 
+            {/* Prompt Text */}
             <p className="my-4 font-satoshi text-sm text-gray-700">
                 {post.prompt}
             </p>
 
+            {/* Like Button */}
             <span className="flex justify-content-start items-center gap-1 text-xs" onClick={() => handleLike(post._id)}>
                 <Image src={isLiked ? liked : unliked} alt="like" width={25} height={25} className="my-3 size-4 cursor-pointer" /> {likedBy.length}
             </span>
 
+            {/* Tags */}
             <div className="flex flex-wrap justify-content-start items-stretch gap-1">
                 {post.tag.split(' ').map((tag) => (
                     <p
@@ -96,6 +100,8 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                 ))}
             </div>
 
+
+            {/* Edit/Delete buttons */}
             {session?.user.id === post.creator?._id && pathName === '/profile' && (
                 <div className="mt-5 flex-center gap-4 border-t  border-gray-300 pt-3">
                     <p
