@@ -19,6 +19,16 @@ const usePromptStore = create((set) => ({
             set({ loading: false, error: 'Failed to fetch posts' })
         }
     },
+
+    likePrompt: async (promptId, userId) => {
+        try {
+            const res = await axios.patch(`/api/prompt/${promptId}/likes`, { userId })
+            return res.data
+        } catch (err) {
+            console.log('Error liking prompt:', err)
+            set({ error: 'Failed to like prompt' })
+        }
+    }
 }))
 
 export default usePromptStore

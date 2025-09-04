@@ -3,7 +3,7 @@ import { connectToDB } from "@/utils/database"
 import { Respond } from "@/utils/Respond"
 
 export const PATCH = async (request, { params }) => {
-    const { prompt, tag } = await request.json()
+    const { userId } = await request.json()
     const { id } = await params
 
     try {
@@ -11,14 +11,15 @@ export const PATCH = async (request, { params }) => {
 
         const existingPrompt = await Prompt.findById(id)
 
-        if (!existingPrompt) return Response.json("Prompt not found", { status: 404 })
+        if (!existingPrompt) return Respond(404, false, "Prompt not found")
 
-        existingPrompt.prompt = prompt
-        existingPrompt.tag = tag
+        const index = existingPrompt.likedBy.indexOf(userId)
+        
+        index > -1 ? existingPrompt.likedBy.splice(index, 1) : existingPrompt.likedBy.push(userId)
 
         await existingPrompt.save()
 
-        return Respond(200, true, "Prompt Updated Successfully", existingPrompt)
+        return Respond(200, true, "Updated like status", existingPrompt.likedBy)
     } catch (error) {
         console.log(error)
         return Respond(500, false, error.message)

@@ -3,19 +3,21 @@
 import { useState } from "react"
 import Image from 'next/image'
 import { usePathname } from "next/navigation"
+
 import useAuthStore from "@/store/useAuthStore"
+import usePromptStore from "@/store/usePromptStore"
 
 import { copy, liked, tick, unliked } from "@/assets/icons"
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
     const pathName = usePathname()
-
     const { session } = useAuthStore()
+    const { likePrompt } = usePromptStore()
 
     const [copied, setCopied] = useState('')
-
-    const [isLiked, setIsLiked] = useState(false)
+    const [likedBy, setLikedBy] = useState(post.likedBy || [])
+    const [isProcessing, setIsProcessing] = useState(false)
 
     const handleCopy = () => {
         setCopied(post.prompt)
@@ -24,11 +26,23 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     }
 
     const handleLike = async (pid) => {
-        setIsLiked(!isLiked)
-        console.log(pid, " - ", session?.user.id)
-        // await likePrompt(post.id, session?.user.id)
-        // await fetchUserPrompts(session?.user.id)
+        if (!session?.user.id || isProcessing) return
+        setIsProcessing(true)
+
+        const alreadyLiked = likedBy.includes(session.user.id)
+        const updatedLikedBy = alreadyLiked ? likedBy.filter((id) => id !== session.user.id) : [...likedBy, session.user.id]
+
+        setLikedBy(updatedLikedBy)
+
+        try {
+            const res = await likePrompt(pid, session.user.id)
+            if (res?.data) setLikedBy(res.data)
+        } finally {
+            setIsProcessing(false)
+        }
     }
+
+    const isLiked = likedBy.includes(session?.user.id)
 
     return (
         <div className="prompt_card">
@@ -54,7 +68,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
                 <div className="copy_btn" onClick={handleCopy}>
                     <Image
-                        src={copied === post.prompt ? tick : copy }
+                        src={copied === post.prompt ? tick : copy}
                         alt="copy"
                         width={25}
                         height={25}
@@ -66,8 +80,8 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
                 {post.prompt}
             </p>
 
-            <span className="" onClick={() => handleLike(post._id)}>
-                <Image src={isLiked ? liked : unliked} alt="like" width={25} height={25} className="my-3 size-4 cursor-pointer"/> {post.likes}
+            <span className="flex justify-content-start items-center gap-1 text-xs" onClick={() => handleLike(post._id)}>
+                <Image src={isLiked ? liked : unliked} alt="like" width={25} height={25} className="my-3 size-4 cursor-pointer" /> {likedBy.length}
             </span>
 
             <div className="flex flex-wrap justify-content-start items-stretch gap-1">
