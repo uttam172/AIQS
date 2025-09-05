@@ -13,7 +13,6 @@ import Profile from '@/components/Profile'
 const MyProfile = () => {
 
     const router = useRouter()
-
     const { session } = useAuthStore()
     const { userPrompts, fetchUserPrompts, deletePrompt } = useUserPromptStore()
 

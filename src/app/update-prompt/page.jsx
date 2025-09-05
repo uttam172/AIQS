@@ -12,11 +12,10 @@ import Loading from "@/components/loading"
 const UpdatePrompt = () => {
 
     const router = useRouter()
-    const searchParams = useSearchParams()
-
-    const promptId = searchParams.get("id")
-
     const { editPrompt, fetchPromptById } = useUserPromptStore()
+
+    const searchParams = useSearchParams()
+    const promptId = searchParams.get("id")
 
     const [post, setPost] = useState({ prompt: "", tag: "" })
     const [submitting, setIsSubmitting] = useState(false)
