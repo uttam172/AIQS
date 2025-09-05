@@ -3,8 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useState } from 'react'
 
 import useAuthStore from '@/store/useAuthStore'
 
@@ -15,20 +14,9 @@ const Nav = () => {
 
     const router = useRouter()
 
-    const { signIn, signOut, initializeAuth, session, providers, loading, error } = useAuthStore()
+    const { signIn, signOut, session, providers, loading, error } = useAuthStore()
 
     const [toggleDropdown, setToggleDropdown] = useState(false)
-
-    const { data: sessionData } = useSession()
-    const setSession = useAuthStore((state) => state.setSession)
-
-    useEffect(() => {
-        setSession(sessionData || null)
-    }, [sessionData, setSession])
-
-    useEffect(() => {
-        initializeAuth()
-    }, [initializeAuth])
 
     if (loading) return <Loading />
     if (error) return <div className="text-red-500">error: {error}</div>
