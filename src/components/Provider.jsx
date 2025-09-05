@@ -23,7 +23,7 @@ const SessionSync = () => {
 
 const Provider = ({ children, session }) => {
     return (
-        <SessionProvider session={session} refetchInterval={0} refetchOnWindowFocus={false}>\
+        <SessionProvider session={session} refetchInterval={0} refetchOnWindowFocus={false}>
             <SessionSync />
             {children}
         </SessionProvider>
