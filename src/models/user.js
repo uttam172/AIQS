@@ -13,9 +13,22 @@ const UserSchema = new Schema({
     },
     image: {
         type: String,
+    },
+    googleId: {
+        type: String,
     }
 })
 
-const User1 = models.User || model("User", UserSchema)
+UserSchema.statics.fromGoogleAuthResponse = function (authResponse) {
+    const { email, given_name, family_name, picture } = authResponse
+    return this.create({
+        email,
+        username: `${given_name} ${family_name}`,
+        image: picture,
+        googleId: authResponse.sub,
+    })
+}
 
-export default User1
+const User = models.User || model("User", UserSchema)
+
+export default User

@@ -16,6 +16,12 @@ const UserSchema = new Schema({
     },
     googleId: {
         type: String,
+    },
+    facebookId: {
+        type: String,
+    },
+    githubId: {
+        type: String,
     }
 })
 
@@ -29,6 +35,6 @@ UserSchema.statics.fromGoogleAuthResponse = function (authResponse) {
     })
 }
 
-const User = models.User || model("User", UserSchema)
+const User1 = models.User || model("User", UserSchema)
 
-export default User
+export default User1
