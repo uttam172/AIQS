@@ -7,19 +7,15 @@ import { useState } from 'react'
 
 import useAuthStore from '@/store/useAuthStore'
 
-import Loading from './loading'
 import { AIQS, logo } from '@/assets/images'
 
 const Nav = () => {
 
     const router = useRouter()
 
-    const { signIn, signOut, session, providers, loading, error } = useAuthStore()
+    const { signIn, signOut, session, providers } = useAuthStore()
 
     const [toggleDropdown, setToggleDropdown] = useState(false)
-
-    if (loading) return <Loading />
-    if (error) return <div className="text-red-500">error: {error}</div>
 
     return (
         <nav className='flex-between w-full mb-16 pt-3'>
